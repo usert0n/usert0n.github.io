@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$BOLT | Болтопедия</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base fonts */
+        body, p, div, span, a, li, td {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        h1, h2, h3, h4, .article-title h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation styling */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+        }
+
+        /* Hand-drawn border effect */
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #333;
+            border-radius: 0;
+            transform: skew(-1deg) rotate(0.5deg);
+            transition: all 0.2s ease;
+        }
+
+        /* "Nail" effect in corners */
+        .nav-links a::after {
+            content: '•';
+            position: absolute;
+            font-size: 8px;
+            color: #333;
+            top: 4px;
+            left: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #000;
+            transform: translateY(-1px);
+        }
+
+        .nav-links a:hover::before {
+            transform: skew(1deg) rotate(-0.5deg);
+            border-color: #000;
+        }
+
+        /* Left sidebar specific */
+        .left-sidebar .nav-links {
+            flex-direction: column;
+        }
+
+        .left-sidebar .nav-links a {
+            margin: 4px 0;
+            width: fit-content;
+        }
+
+        /* Special elements */
+        .infobox, .toc {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block, code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Heading effects */
+        h1, h2, h3 {
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table styles */
+        table {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        body {
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #202122;
+            overflow-y: auto;
+        }
+
+        .article-title h1 {
+            font-size: 3.2em;
+            margin-bottom: 0.3em;
+        }
+
+        h2 {
+            font-size: 2.4em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            font-size: 2em;
+            color: #2c3e50;
+        }
+
+        .hatnote {
+            font-style: italic;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+            font-size: 0.85em;
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 20px;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+        }
+
+        .main-content {
+            background: white;
+            padding: 25px;
+            border: 1px solid #a7d7f9;
+            border-radius: 2px;
+        }
+
+        .article-title {
+            border-bottom: 1px solid #a2a9b1;
+            margin-bottom: 0.5em;
+        }
+
+        .infobox {
+            float: right;
+            margin: 0.5em 0 1em 1em;
+            border: 1px solid #a2a9b1;
+            padding: 0.2em;
+            background-color: #f8f9fa;
+            width: 22em;
+        }
+
+        .infobox-title {
+            text-align: center;
+            font-size: 1.25em;
+            font-weight: bold;
+            background-color: #eaecf0;
+            padding: 0.2em;
+        }
+
+        .infobox img {
+            width: 100%;
+            height: auto;
+        }
+
+        .toc {
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 10px;
+            display: inline-block;
+            margin: 1em 0;
+        }
+
+        .reference {
+            font-size: 0.8em;
+            vertical-align: super;
+            color: #0645ad;
+        }
+
+        .edit-section {
+            font-size: 0.8em;
+            margin-left: 1em;
+            color: #0645ad;
+        }
+
+        blockquote {
+            margin: 1em 0;
+            padding-left: 1em;
+            border-left: 3px solid #c8ccd1;
+            color: #54595d;
+        }
+
+        .bolt-category {
+            color: #ba0000;
+            font-weight: bold;
+        }
+
+        @keyframes helicopter {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(2160deg);
+            }
+        }
+        
+        .bolt-logo img {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transform-origin: center;
+        }
+        
+        .spinning {
+            animation: helicopter 1.5s cubic-bezier(0.3, 0, 0.7, 1) forwards;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: scale(0.9);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .back-to-top img {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-to-top:hover img {
+            transform: translateY(-5px) rotate(-10deg);
+        }
+
+        .top-bolt-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            height: 60px;
+            width: 100%;
+        }
+
+        .bolt-scroll {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: auto;
+            animation: none;
+            position: static;
+        }
+
+        .top-bolt-row img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="content-wrapper">
+            <div></div>
+            <div class="top-bolt-row">
+                <div class="bolt-scroll">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="left-sidebar">
+            
+            <div class="bolt-logo">
+                <img src="about-2.png" alt="Болтопедия Logo" class="floating-bolt">
+            </div>
+            <div class="wiki-header">BOLTopedia</div>
+            <nav class="nav-links">
+                <a href="index.html">BOLT</a>
+                <a href="introduction.html">КАБАН</a>
+                <a href="dedust.html">DeDust</a>
+                <a href="ton.html">TON</a>
+                <a href="boltgames.html">GAMES</a>
+            
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="article-title">
+                <h1>Кто такой кабан?</h1>
+            </div>
+
+            <div class="hatnote">
+                Основная статья: <a href="index.html">$BOLT</a>
+            </div>
+
+            <div class="infobox">
+                <div class="infobox-title">Кабан</div>
+                <img src="pexels-izafi-29252168.jpg" alt="Тотемное животное - Кабан" style="width: 100%; margin-bottom: 10px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <th colspan="2" style="text-align: center; background: #eaecf0;">Тотемное животное $BOLT</th>
+                    </tr>
+                    <tr>
+                        <td>Статус:</td>
+                        <td>Священный защитник</td>
+                    </tr>
+                    <tr>
+                        <td>Первое упоминание:</td>
+                        <td>ICO $BOLT (2022)</td>
+                    </tr>
+                    <tr>
+                        <td>Сила:</td>
+                        <td>Охрана активов</td>
+                    </tr>
+                    <tr>
+                        <td>Особенность:</td>
+                        <td>Хранитель фартов</td>
+                    </tr>
+                </table>
+                <div style="font-size: 0.9em; font-style: italic; margin-top: 10px; text-align: center;">
+                    "Где Кабан — там фарт"
+                </div>
+            </div>
+
+            <p><strong>Введение в $BOLT</strong> представляет собой обзор культурного и исторического контекста первого мем-токена в экосистеме TON. Проект зародился в русскоязычном сообществе, известном своим специфическим юмором, что значительно повлияло на его развитие и характер контента.<sup class="reference">[1]</sup></p>
+
+            <div class="toc">
+                <h2>Содержание</h2>
+                <ol>
+                    <li><a href="#history">История</a></li>
+                    <li><a href="#philosophy">Философия проекта</a></li>
+                    <li><a href="#nft">NFT-коллекция</a></li>
+                    
+                   
+                </ol>
+            </div>
+
+            <h2 id="history">1. История</h2>
+            <h3 id="creation">1.1. Создание</h3>
+            <p>$BOLT появился в мае 2022 года в сообществе СНГ, став первым и впоследствии самым популярным мем-токеном на блокчейне TON. Большая часть контента реализуется на локальных языках, что создает уникальную культурную среду.<sup class="reference">[2]</sup></p>
+
+            <h2 id="philosophy">2. Философия проекта</h2>
+            <p>Основная цель создания токена заключалась в иронизировании над существующими подходами к анализу криптопроектов. Криптосообщество излишне серьезно подходит к анализу токенов, изучая структуру холдингов, ища полезность и оценивая наличие серьезных инвесторов. Huebel $BOLT был призван стереть эти границы и продемонстрировать, что цена актива зависит исключительно от веры в его потенциал.<sup class="reference">[3]</sup></p>
+
+            <blockquote>
+                "Цена актива зависит только от того, насколько все верят в его потенциал."
+                <br>— <i>Философия $BOLT</i>
+            </blockquote>
+
+            <h2 id="nft">3. NFT-коллекция</h2>
+            <p>Коллекция Huebel NFT является нативной для экосистемы TON. Она была создана к запуску первой NFT-маркетплейс на TON — Disintar.io. Концепция маркетплейса заключалась в создании виртуальной комнаты, которую можно украшать различными NFT. Huebel отлично справляется с задачей декорирования пространства.<sup class="reference">[4]</sup></p>
+
+            <h2 id="totem">4. Тотемное животное</h2>
+            <p>🐗 Кабан является священным животным, охраняющим активы держателей мем-токена. Первые упоминания кабана были замечены во время ICO. Со временем пользователи подхватили волну хайпа и начали поддерживать движения в пользу тотемного животного. Некоторые артефакты были созданы холдерами и в будущем могут быть реализованы в P2E-играх на блокчейне TON.<sup class="reference">[5]</sup></p>
+
+            <h2 id="references">5. Примечания</h2>
+            <ol>
+                <li>"Культурные особенности $BOLT", BOLT Foundation, 2022</li>
+                <li>"История мем-токенов в СНГ", Crypto Research, 2023</li>
+                <li>"Философия $BOLT: Переосмысление ценности", TON Analytics, 2023</li>
+                <li>"NFT Huebel: От концепции к реализации", Digital Art Review, 2022</li>
+                <li>"Тотемные животные в криптокультуре", Crypto Anthropology Journal, 2023</li>
+            </ol>
+
+            <div style="margin-top: 20px; padding: 10px; background: #f8f9fa; border: 1px solid #a2a9b1;">
+                <b>См. также:</b>
+                <ul>
+                    <li><a href="index.html">$BOLT</a></li>
+                    <li><a href="#">Мем-токены на TON</a></li>
+                    <li><a href="#">Криптокультура СНГ</a></li>
+                    <li><a href="#">Huebel NFT</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-to-top">
+        <img src="about-2.png" alt="Наверх">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const bolt = document.querySelector('.bolt-logo img');
+            
+            // Initial animation on page load
+            bolt.classList.add('spinning');
+            
+            // Click handler
+        bolt.addEventListener('click', () => {
+                if (!bolt.classList.contains('spinning')) {
+                bolt.classList.add('spinning');
+                
+                    bolt.addEventListener('animationend', function handler() {
+                        bolt.classList.remove('spinning');
+                        bolt.removeEventListener('animationend', handler);
+                    });
+                }
+            });
+            
+            // Remove initial animation class after it completes
+            bolt.addEventListener('animationend', function handler() {
+                    bolt.classList.remove('spinning');
+                bolt.removeEventListener('animationend', handler);
+            });
+        });
+
+        // Back to top functionality
+        const backToTop = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            const scrollDuration = 500; // Faster duration (500ms instead of 800ms)
+            const scrollStep = -window.scrollY / (scrollDuration / 15);
+            
+            const scrollInterval = setInterval(() => {
+                if (window.scrollY !== 0) {
+                    window.scrollBy(0, scrollStep);
+                } else {
+                    clearInterval(scrollInterval);
+                }
+            }, 15);
+        });
+
+        // Updated smooth scroll functionality
+        document.querySelectorAll('.toc a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const headerOffset = 70; // Height of sticky header
+                    const elementPosition = window.pageYOffset + targetElement.getBoundingClientRect().top - headerOffset;
+                    const scrollDuration = 500;
+                    const scrollStep = (elementPosition - window.pageYOffset) / (scrollDuration / 15);
+                    
+                    const scrollInterval = setInterval(() => {
+                        if (Math.abs(elementPosition - window.pageYOffset) > Math.abs(scrollStep)) {
+                            window.scrollBy(0, scrollStep);
+                        } else {
+                            window.scrollTo(0, elementPosition);
+                            clearInterval(scrollInterval);
+                        }
+                    }, 15);
+            }
+            });
+        });
+    </script>
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+    const bolts = document.querySelectorAll('.bolt-scroll img');
+    
+    // Initial state - all bolts at top
+    bolts.forEach(bolt => {
+        bolt.style.transform = 'translateY(0)';
+    });
+
+    // Click handler for each bolt
+    bolts.forEach(bolt => {
+        bolt.addEventListener('click', function() {
+            if (!this.classList.contains('hammered-in')) {
+                // Hammer down
+                this.classList.remove('pulled-out');
+                this.classList.add('hammered-in');
+                
+                // Add shake effect to simulate impact
+                setTimeout(() => {
+                    const row = document.querySelector('.top-bolt-row');
+                    row.style.transform = 'translateX(1px)';
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(-1px)';
+                        setTimeout(() => {
+                            row.style.transform = 'translateX(0)';
+                        }, 50);
+                    }, 50);
+                }, 300);
+            } else {
+                // Pull up
+                this.classList.remove('hammered-in');
+                this.classList.add('pulled-out');
+            }
+        });
+        });
+    });
+</script>
+</body>
+</html> 

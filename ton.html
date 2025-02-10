@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Open Network | Болтопедия</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base fonts */
+        body, p, div, span, a, li, td {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        h1, h2, h3, h4, .article-title h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation styling */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+        }
+
+        /* Hand-drawn border effect */
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #333;
+            border-radius: 0;
+            transform: skew(-1deg) rotate(0.5deg);
+            transition: all 0.2s ease;
+        }
+
+        /* "Nail" effect in corners */
+        .nav-links a::after {
+            content: '•';
+            position: absolute;
+            font-size: 8px;
+            color: #333;
+            top: 4px;
+            left: 4px;
+        }
+
+        .nav-links a:hover {
+            color: #000;
+            transform: translateY(-1px);
+        }
+
+        .nav-links a:hover::before {
+            transform: skew(1deg) rotate(-0.5deg);
+            border-color: #000;
+        }
+
+        /* Left sidebar specific */
+        .left-sidebar .nav-links {
+            flex-direction: column;
+        }
+
+        .left-sidebar .nav-links a {
+            margin: 4px 0;
+            width: fit-content;
+        }
+
+        /* Special elements */
+        .infobox, .toc {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block, code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Heading effects */
+        h1, h2, h3 {
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table styles */
+        table {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        body {
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #202122;
+            overflow-y: auto;
+        }
+
+        .article-title h1 {
+            font-size: 3.2em;
+            margin-bottom: 0.3em;
+        }
+
+        h2 {
+            font-size: 2.4em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            font-size: 2em;
+            color: #2c3e50;
+        }
+
+        .hatnote {
+            font-style: italic;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+            font-size: 0.85em;
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 20px;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+        }
+
+        .main-content {
+            background: white;
+            padding: 25px;
+            border: 1px solid #a7d7f9;
+            border-radius: 2px;
+        }
+
+        .article-title {
+            border-bottom: 1px solid #a2a9b1;
+            margin-bottom: 0.5em;
+        }
+
+        .infobox {
+            float: right;
+            margin: 0.5em 0 1em 1em;
+            border: 1px solid #a2a9b1;
+            padding: 0.2em;
+            background-color: #f8f9fa;
+            width: 22em;
+        }
+
+        .infobox-title {
+            text-align: center;
+            font-size: 1.25em;
+            font-weight: bold;
+            background-color: #eaecf0;
+            padding: 0.2em;
+        }
+
+        .infobox img {
+            width: 100%;
+            height: auto;
+        }
+
+        .toc {
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 10px;
+            display: inline-block;
+            margin: 1em 0;
+        }
+
+        .reference {
+            font-size: 0.8em;
+            vertical-align: super;
+            color: #0645ad;
+        }
+
+        .edit-section {
+            font-size: 0.8em;
+            margin-left: 1em;
+            color: #0645ad;
+        }
+
+        blockquote {
+            margin: 1em 0;
+            padding-left: 1em;
+            border-left: 3px solid #c8ccd1;
+            color: #54595d;
+        }
+
+        .bolt-category {
+            color: #ba0000;
+            font-weight: bold;
+        }
+
+        @keyframes helicopter {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(2160deg);
+            }
+        }
+        
+        .bolt-logo img {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transform-origin: center;
+        }
+        
+        .spinning {
+            animation: helicopter 1.5s cubic-bezier(0.3, 0, 0.7, 1) forwards;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: scale(0.9);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .back-to-top img {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-to-top:hover img {
+            transform: translateY(-5px) rotate(-10deg);
+        }
+
+        .top-bolt-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            height: 60px;
+            width: 100%;
+        }
+
+        .bolt-scroll {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: auto;
+            animation: none;
+            position: static;
+        }
+
+        .top-bolt-row img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="content-wrapper">
+            <div></div>
+            <div class="top-bolt-row">
+                <div class="bolt-scroll">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="left-sidebar">
+            
+            <div class="bolt-logo">
+                <img src="about-2.png" alt="Болтопедия Logo" class="floating-bolt">
+            </div>
+            <div class="wiki-header" >BOLTopedia</div>
+            <nav class="nav-links">
+                <a href="index.html">BOLT</a>
+                <a href="introduction.html">КАБАН</a>
+                <a href="dedust.html">DeDust</a>
+                <a href="ton.html">TON</a>
+                <a href="boltgames.html">GAMES</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="article-title">
+                <h1>TON - The Open Network</h1>
+            </div>
+            <script src="https://widgets.coingecko.com/gecko-coin-price-chart-widget.js"></script>
+            <gecko-coin-price-chart-widget 
+                locale="en" 
+                transparent-background="true" 
+                outlined="true" 
+                coin-id="the-open-network" 
+                initial-currency="usd">
+            </gecko-coin-price-chart-widget>
+            <div class="hatnote">
+                Именно на этой сетке был закручен <a href="introduction.html">$BOLT</a>
+            </div>
+
+            <div class="infobox">
+                <div class="infobox-title">The Open Network</div>
+                <img src="gram_cryptocurrency_logo.svg.png" alt="TON Logo" style="width: 100%; margin-bottom: 10px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <th colspan="2" style="text-align: center; background: #eaecf0;">Общая информация</th>
+                    </tr>
+                    <tr>
+                        <td>Тип:</td>
+                        <td>одноранговая сеть</td>
+                    </tr>
+                    <tr>
+                        <td>Авторы:</td>
+                        <td>Николай Дуров и Павел Дуров</td>
+                    </tr>
+                    <tr>
+                        <td>Написана на:</td>
+                        <td>C++</td>
+                    </tr>
+                    <tr>
+                        <td>Последняя версия:</td>
+                        <td>2024.01 (26 января 2024)</td>
+                    </tr>
+                    <tr>
+                        <td>Репозиторий:</td>
+                        <td><a href="https://github.com/ton-blockchain/ton">GitHub</a></td>
+                    </tr>
+                    <tr>
+                        <td>Лицензия:</td>
+                        <td>GNU GPL 2 и GNU LGPL 2</td>
+                    </tr>
+                    <tr>
+                        <td>Сайт:</td>
+                        <td><a href="https://ton.org">ton.org</a></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="toc">
+                <h2>Содержание</h2>
+                <ol>
+                    <li><a href="#intro">Введение</a></li>
+                    <li><a href="#history">История</a>
+                        <ol>
+                            <li><a href="#project-launch">Запуск проекта</a></li>
+                            <li><a href="#token-sale">Продажа токенов</a></li>
+                            <li><a href="#development">Разработка</a></li>
+                            <li><a href="#project-closure">Прекращение проекта (2019—2020)</a></li>
+                            <li><a href="#continued-development">Продолжение разработки</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#architecture">Архитектура TON</a></li>
+                    <li><a href="#components">Компоненты TON</a>
+                        
+                    </li>
+                    
+                </ol>
+            </div>
+
+            <h2 id="intro">Введение</h2>
+            <p>The Open Network (TON) — децентрализованная блокчейн-сеть, а также платформа, обеспечивающая создание защищённых приложений с встроенными инструментами анонимности, такими как прокси-сервер и анонимайзер. Сеть основана на принципах оверлейной P2P-сети и предоставляет различные сервисы, включая обмен сообщениями, платёжные операции с использованием криптовалюты Toncoin, хранение данных и операционную систему для распределённых приложений.</p>
+
+            <p>Концепция TON разработана братьями Дуровыми, которые привлекли под этот проект инвестиции в несколько миллиардов долларов и запланировали перевод на TON своего популярного мессенджера Telegram<sup><a href="#ref4">[4]</a></sup><sup><a href="#ref5">[5]</a></sup><sup><a href="#ref6">[6]</a></sup>.</p>
+
+            <h2 id="history">История</h2>
+            <h3 id="project-launch">Запуск проекта</h3>
+            <p>В течение восьми лет Telegram развивался только на личные средства Павла Дурова. Из материалов, представленных в ходе рассмотрения претензий Комиссии по ценным бумагам США (SEC) к Telegram, следует, что к 2017 году мессенджеру требовались дополнительные деньги на оплату и обслуживание серверов.</p>
+
+            <h3 id="token-sale">Продажа токенов</h3>
+            <p>Для привлечения средств Telegram организовал закрытую продажу фьючерсных контрактов, которые давали право на получение токенов Gram после запуска блокчейна. К участию были приглашены тщательно отобранные инвесторы с минимальным чеком в 20 млн $ в первом раунде и 1 млн $ — во втором. Всего в двух раундах компания привлекла 1,7 млрд долларов.</p>
+
+            <h3 id="development">Разработка</h3>
+            <p>В апреле 2019 года в СМИ появилась информация о создании независимой компании TON Labs. По словам управляющего директора компании Александра Филатова, TON Labs «готовит инструментарий для разработчиков приложений для TON». 6 сентября 2019 года открылся тестовый портал TON для разработчиков с официальными спецификациями проекта.</p>
+
+            <h3 id="project-closure">Прекращение проекта (2019—2020)</h3>
+            <p>В октябре 2019 года Комиссия по ценным бумагам и биржам США (SEC) потребовала запрета на выпуск Gram. После длительных судебных разбирательств SEC признала токены проекта ценными бумагами. 12 мая 2020 года Павел Дуров официально заявил, что работа над проектом Telegram Open Network прекращается.</p>
+
+            <h3 id="continued-development">Продолжение разработки</h3>
+            <p>После объявления о закрытии проекта командой Telegram были созданы различные проекты-продолжения. 29 мая 2020 года сообщество из разработчиков, валидаторов, победителей публичных blockchain-конкурсов Telegram и криптоэнтузиастов анонсировало продолжение работы над проектом.</p>
+
+            <h2 id="architecture">Архитектура TON</h2>
+    
+            
+            <blockquote>
+                "TON — это амбиция запустить децентрализованный Web и амбиция запустить новый Ethereum"
+                <br>— <i>TechCrunch</i><sup><a href="#ref14">[14]</a></sup>
+            </blockquote>
+
+            <p>TON — это даркнет с полнофункциональными сервисами от платежей до хранилища файлов и приложений, который базируется на парадигме распределенной системы без зависимости от постоянного подключения к управляющим серверам. Дуров в бизнес-плане называет его ближайшим аналогом даркнет-систему I2P.</p>
+
+            <p>В архитектуру платформы TON, как и других даркнетов, заложено несколько уровней защиты от попытки установить над ней любой вид государственной регуляции (защита «от цензуры» по тексту бизнес-плана Павла Дурова).</p>
+
+            <table class="wikitable components-table" style="width: 100%; margin: 1em 0; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <tr>
+                    <th style="background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #a2a9b1;">Компонент TON</th>
+                    <th style="background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #a2a9b1;">Назначение</th>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Blockchain</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Ядро платежной системы на блокчейне, рассчитанное на миллионы платежей в секунду
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON P2P Network</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Организация сети класса «peer-to-peer» из самих клиентов TON
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Storage</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Распределенное «торрент-подобное» хранилище для файлов и сервисов
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Proxy</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Прокси и анонимайзер, архитектурно подобный I2P и Tor
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON DHT</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Распределенная система поиска объектов по хеш-кодам, играющая роль, подобную «торрент-трекеру» TON
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Services</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Платформа для создания распределенных приложений для TON
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON DNS</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Система поиска по «человеческим именам» хеш-кодов в TON DHT
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Payments</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Платежная система, в том числе для микроплатежей с отложенным отображением в TON Blockchain
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Virtual Machine</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Виртуальные машины для исполнения алгоритмов контрактов между покупателями и продавцами
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Messages</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        В TON сообщения возможны не только между людьми, но и между алгоритмами. Это базовая функция коммуникации
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Hypercube Routing</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Система вычисления оптимального пути в TON P2P Network для сообщений TON Messages между нодами
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        <strong>TON Validators</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #eaecf0;">
+                        Пользователи сети, создающие и проверяющие блокчейны TON Blockchain, то есть проводящие платежи
+                    </td>
+                </tr>
+            </table>
+
+            <h2 id="components">Компоненты TON</h2>
+            
+            <h3 id="ton-blockchain">TON Blockchain</h3>
+            <p>TON Blockchain использует proof-of-stake консенсус, и для генерации новых блоков майнинг не требуется. Командой Telegram почти вся масса из 5 миллиардов монет была переведена на специальные смарт-контракты proof-of-work givers. Новые монеты можно получить путем майнинга этих контрактов. Proof-of-work giver контракты имеют свои пределы и иссякнут, как только пользователи добудут все доступные монеты.</p>
+
+            <h3 id="ton-storage">TON Storage</h3>
+            <p>Распределенное файловое хранилище, которое хранит данные не на серверах Телеграм, а по большей части на клиентских устройствах, которые обмениваются данными аналогично торрентам. От попытки ввести государственную цензуру по файловому хранилищу и отследить обмен информацией хранилище и его каналы защищены криптографией.</p>
+
+            <p>TON Storage будет иметь коммерческий вариант использования. Пользователи, которые продадут TON Foundation свое дисковое пространство, будут получать от него плату в криптовалюте Gram. Аналогичным образом пользователи, которые захотят иметь больше пространства, чем в бесплатном тарифе, смогут купить его через Gram.</p>
+
+            <h3 id="ton-proxy">TON Proxy</h3>
+            <p>Для обхода межсетевых экранов блокирования TON по IP-адресам, а также попыток отследить активность пользователей, в TON имеется подсистема, функционирующая как P2P Proxy, аналогично архитектуре Tor или Hola.</p>
+
+            <p>Отличием от Tor в TON Proxy является заложенная на уровень архитектуры балансировка нагрузки с защитой от DoS-атак. При перегрузке каналов TON Proxy автоматически меняет маршрутизацию. Другим отличием от Tor является использование не «луковой маршрутизации», а «чесночной маршрутизации», как в I2P.</p>
+
+            <h2 id="everscale">Everscale</h2>
+            <div class="hatnote">Основная статья: <a href="#">Free TON</a></div>
+            <p>7 мая 2020 года сообщество разработчиков объявило о запуске проекта Free TON, в основе которого лежит открытый исходный код Telegram Open Network. Нативным токеном проекта Free TON стал TON Crystal.</p>
+
+            <h2 id="references">Примечания</h2>
+            <ol class="references">
+                <li id="ref4">
+                    <span class="reference-text">
+                        <a href="https://icobench.com/ico/telegram-open-network">Telegram Open Network (Gram) - ICO rating and details</a>. ICObench. 
+                        <i>Архивировано</i> <a href="https://web.archive.org/web/20180428094227/https://icobench.com/ico/telegram-open-network">28 апреля 2018</a>.
+                    </span>
+                </li>
+                <li id="ref5">
+                    <span class="reference-text">
+                        <a href="https://crypinfo.ru/telegram-podnyal-1-7-milliarda-dollarov-na-ico/">Telegram поднял 1,7 миллиарда долларов на ICO</a>. Крипинфо.
+                        <i>Архивировано</i> <a href="https://web.archive.org/web/20180428094255/https://crypinfo.ru/telegram-podnyal-1-7-milliarda-dollarov-na-ico/">28 апреля 2018</a>.
+                    </span>
+                </li>
+                <li id="ref6">
+                    <span class="reference-text">
+                        <a href="https://bits.media/articles/platforma-ton-ot-telegram-tekhnicheskoe-opisanie-i-pervye-vpechatleniya/">Платформа TON от Telegram: техническое описание и первые впечатления</a>. bits.media.
+                        <i>Архивировано</i> <a href="https://web.archive.org/web/20180428094310/https://bits.media/articles/platforma-ton-ot-telegram-tekhnicheskoe-opisanie-i-pervye-vpechatleniya/">28 апреля 2018</a>.
+                    </span>
+                </li>
+                <li id="ref14">
+                    <span class="reference-text">
+                        <a href="https://techcrunch.com/2018/01/15/inside-telegrams-ambitious-1-2b-ico-to-create-the-next-ethereum/">Inside Telegram's ambitious $1.2B ICO to create the next Ethereum</a>. TechCrunch.
+                        <i>Архивировано</i> <a href="https://web.archive.org/web/20200403222412/https://techcrunch.com/2018/01/15/inside-telegrams-ambitious-1-2b-ico-to-create-the-next-ethereum/">3 апреля 2020</a>.
+                    </span>
+                </li>
+            </ol>
+
+            <div style="margin-top: 20px; padding: 10px; background: #f8f9fa; border: 1px solid #a2a9b1;">
+                <b>См. также:</b>
+                <ul>
+                    <li><a href="index.html">$BOLT</a></li>
+                    <li><a href="https://ru.wikipedia.org/w/index.php?title=The_Open_Network">The Open Network</a></li>
+                    <li><a href="https://ru.wikipedia.org/wiki/Telegram">Telegram</a></li>
+                    <li><a href="https://ru.wikipedia.org/wiki/Блокчейн">Блокчейн</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-to-top">
+        <img src="about-2.png" alt="Наверх">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bolt = document.querySelector('.bolt-logo img');
+            
+            // Initial animation on page load
+            bolt.classList.add('spinning');
+            
+            // Click handler
+            bolt.addEventListener('click', () => {
+                if (!bolt.classList.contains('spinning')) {
+                    bolt.classList.add('spinning');
+                    
+                    bolt.addEventListener('animationend', function handler() {
+                        bolt.classList.remove('spinning');
+                        bolt.removeEventListener('animationend', handler);
+                    });
+                }
+            });
+            
+            // Remove initial animation class after it completes
+            bolt.addEventListener('animationend', function handler() {
+                bolt.classList.remove('spinning');
+                bolt.removeEventListener('animationend', handler);
+            });
+        });
+
+        // Back to top functionality
+        const backToTop = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            const scrollDuration = 500; // Faster duration (500ms instead of 800ms)
+            const scrollStep = -window.scrollY / (scrollDuration / 15);
+            
+            const scrollInterval = setInterval(() => {
+                if (window.scrollY !== 0) {
+                    window.scrollBy(0, scrollStep);
+                } else {
+                    clearInterval(scrollInterval);
+                }
+            }, 15);
+        });
+
+        // Updated smooth scroll functionality
+        document.querySelectorAll('.toc a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const headerOffset = 70; // Height of sticky header
+                    const elementPosition = window.pageYOffset + targetElement.getBoundingClientRect().top - headerOffset;
+                    const scrollDuration = 500;
+                    const scrollStep = (elementPosition - window.pageYOffset) / (scrollDuration / 15);
+                    
+                    const scrollInterval = setInterval(() => {
+                        if (Math.abs(elementPosition - window.pageYOffset) > Math.abs(scrollStep)) {
+                            window.scrollBy(0, scrollStep);
+                        } else {
+                            window.scrollTo(0, elementPosition);
+                            clearInterval(scrollInterval);
+                        }
+                    }, 15);
+                }
+            });
+        });
+    </script>
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+    const bolts = document.querySelectorAll('.bolt-scroll img');
+    
+    // Initial state - all bolts at top
+    bolts.forEach(bolt => {
+        bolt.style.transform = 'translateY(0)';
+    });
+
+    // Click handler for each bolt
+    bolts.forEach(bolt => {
+        bolt.addEventListener('click', function() {
+            if (!this.classList.contains('hammered-in')) {
+                // Hammer down
+                this.classList.remove('pulled-out');
+                this.classList.add('hammered-in');
+                
+                // Add shake effect to simulate impact
+                setTimeout(() => {
+                    const row = document.querySelector('.top-bolt-row');
+                    row.style.transform = 'translateX(1px)';
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(-1px)';
+                        setTimeout(() => {
+                            row.style.transform = 'translateX(0)';
+                        }, 50);
+                    }, 50);
+                }, 300);
+            } else {
+                // Pull up
+                this.classList.remove('hammered-in');
+                this.classList.add('pulled-out');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html> 

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$BOLT | Болтопедия</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #202122;
+            overflow-y: auto;
+        }
+
+        h1, h2, h3, h4, .article-title h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .article-title h1 {
+            font-size: 2.6em;
+            margin-bottom: 0.5em;
+            color: #1a1a1a;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 1.5em;
+            color: #2c3e50;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: #34495e;
+        }
+
+        .hatnote {
+            font-family: 'JetBrains Mono', monospace;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+            font-size: 0.85em;
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 20px;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+        }
+
+        .main-content {
+            background: white;
+            padding: 25px;
+            border: 1px solid #a7d7f9;
+            border-radius: 2px;
+        }
+
+        .article-title {
+            border-bottom: 1px solid #a2a9b1;
+            margin-bottom: 0.5em;
+        }
+
+        .hatnote {
+            color: #54595d;
+            padding: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .infobox {
+            float: right;
+            margin: 0.5em 0 1em 1em;
+            border: 1px solid #a2a9b1;
+            padding: 0.2em;
+            background-color: #f8f9fa;
+            width: 22em;
+            font-size: 0.9em;
+        }
+
+        .infobox-title {
+            text-align: center;
+            font-size: 1.25em;
+            font-weight: bold;
+            background-color: #eaecf0;
+            padding: 0.2em;
+        }
+
+        .infobox img {
+            width: 100%;
+            height: auto;
+        }
+
+        .toc {
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 10px;
+            display: inline-block;
+            margin: 1em 0;
+        }
+
+        .reference {
+            font-size: 0.8em;
+            vertical-align: super;
+            color: #0645ad;
+        }
+
+        .edit-section {
+            font-size: 0.8em;
+            margin-left: 1em;
+            color: #0645ad;
+        }
+
+        blockquote {
+            margin: 1em 0;
+            padding-left: 1em;
+            border-left: 3px solid #c8ccd1;
+            color: #54595d;
+        }
+
+        .bolt-category {
+            color: #ba0000;
+            font-weight: bold;
+        }
+
+        @keyframes helicopter {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(2160deg);
+            }
+        }
+        
+        .bolt-logo img {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transform-origin: center;
+        }
+        
+        .spinning {
+            animation: helicopter 1.5s cubic-bezier(0.3, 0, 0.7, 1) forwards;
+        }
+
+        code {
+            background: #f0f0f0;
+            color: #2d3436;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Subtle tech effect for headings */
+        h1, h2, h3 {
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New navigation styling */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+        }
+
+        /* Hand-drawn border effect */
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #333;
+            border-radius: 0;
+            transform: skew(-1deg) rotate(0.5deg);
+            transition: all 0.2s ease;
+        }
+
+        /* "Nail" effect in corners */
+        .nav-links a::after {
+            content: '•';
+            position: absolute;
+            font-size: 8px;
+            color: #333;
+            top: 4px;
+            left: 4px;
+        }
+
+        /* Hover effects */
+        .nav-links a:hover::before {
+            transform: skew(1deg) rotate(-0.5deg);
+            border-color: #000;
+        }
+
+        .nav-links a:hover {
+            color: #000;
+            transform: translateY(-1px);
+        }
+
+        /* Left sidebar specific */
+        .left-sidebar .nav-links {
+            flex-direction: column;
+        }
+
+        .left-sidebar .nav-links a {
+            margin: 4px 0;
+            width: fit-content;
+        }
+
+        /* Update all font references */
+        body, p, div, span, a {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .infobox, .toc, .code-block {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .top-bolt-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            height: 60px;
+            width: 100%;
+        }
+
+        .bolt-scroll {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: auto;
+            position: static;
+        }
+
+        .top-bolt-row img {
+            width: 50px;
+            height: 50px;
+        }
+
+        @keyframes scrollBolts {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .token-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .token-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .token-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .token-info-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .token-info-value {
+            font-size: 1em;
+            word-break: break-all;
+        }
+        
+        .token-info-value a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .token-info-value a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="content-wrapper">
+            <div></div>
+            <div class="top-bolt-row">
+                <div class="bolt-scroll">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="left-sidebar">
+            
+            <div class="bolt-logo">
+                <img src="about-2.png" alt="Болтопедия Logo" class="floating-bolt">
+            </div>
+            <div class="wiki-header" >BOLTopedia</div>
+            <nav class="nav-links">
+                <a href="index.html">BOLT</a>
+                <a href="introduction.html">КАБАН</a>
+                <a href="dedust.html">DeDust</a>
+                <a href="ton.html">TON</a>
+                <a href="boltgames.html">GAMES</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="article-title">
+                <h1>$BOLT</h1>
+            </div>
+             
+        
+          
+     <div class="price-widget" style="position:-webkit-sticky; right: 0px; top: 0px; z-index: 1000;">
+    <gecko-coin-price-chart-widget 
+        locale="en" 
+        transparent-background="true" 
+        outlined="true" 
+        coin-id="huebel-bolt" 
+        initial-currency="usd">
+    </gecko-coin-price-chart-widget>
+</div>
+
+    
+
+            <div class="hatnote">
+                Эта статья о мем токене. О других значениях см. <a href="https://ru.wikipedia.org/wiki/%D0%91%D0%BE%D0%BB%D1%82_(%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F)">BOLT (значения)</a>.
+            </div>
+
+            <div class="infobox">
+                <div class="infobox-title">$BOLT</div>
+                <img src="about-2.png" alt="BOLT Logo" style="width: 100%; margin-bottom: 10px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <th colspan="2" style="text-align: center; background: #eaecf0;">Общая информация</th>
+                    </tr>
+                    <tr>
+                        <td>Тип:</td>
+                        <td>Мем токен</td>
+                    </tr>
+                    <tr>
+                        <td>Блокчейн:</td>
+                        <td>TON</td>
+                    </tr>
+                    <tr>
+                        <td>Дата запуска:</td>
+                        <td>Май 2022</td>
+                    </tr>
+                    <tr>
+                        <td>Статус:</td>
+                        <td><span style="color: #1c9111;">ЗАМИНЧЕН</span></td>
+                    </tr>
+                    <tr>
+                        <td>Адрес контракта:</td>
+                        <td style="color: rgb(255, 103, 103); word-break: break-all;">EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw</td>
+                    </tr>
+                    <tr>
+                        <td>Количество холдеров:</td>
+                        <td>22 390</td>
+                    </tr>
+                    <tr>
+                        <td>Исследовать холдеров:</td>
+                        <td><a href="https://tonviewer.com/EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw?section=holders">TONViewer</a></td>
+                    </tr>
+                    <tr>
+                        <td>Адрес в эксплорере:</td>
+                        <td><a href="https://ton.cx/address/EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw">TON.cx</a></td>
+                    </tr>
+                    <tr>
+                        <td>Смарт-контракты:</td>
+                        <td><a href="https://github.com/hacker-volodya/bolt-token-smc">GitHub</a></td>
+                    </tr>
+                    <tr>
+                        <td>Telegram:</td>
+                        <td><a href="http://t.me/boltfoundation">@boltfoundation</a></td>
+                    </tr>
+                    <tr>
+                        <td>Сайт:</td>
+                        <td><a href="https://huebel.art">huebel.art</a></td>
+                    </tr>
+                </table>
+            </div>
+
+            <p><strong>$BOLT</strong> — мем токен, созданный на блокчейне TON в мае 2022 года. Является первым и самым популярным мем-токеном в экосистеме TON. Создан международным крипто-сообществом энтузиастов с целью высмеивания излишне серьезного подхода к анализу токенов и проектов в криптосфере.<sup class="reference">[1]</sup></p>
+
+            <div class="toc">
+                <h2>Содержание</h2>
+                <ol>
+                    <li><a href="#history">История</a>
+                        
+                    </li>
+                    <li><a href="#ecosystem">Экосистема</a>
+                        
+                    </li>
+                    <li><a href="#technical">Технические характеристики</a>
+                    
+                    </li>
+                    <li><a href="#tokenomics">Токеномика</a>
+                    
+                    </li>
+                    <li><a href="#community">Сообщество</a></li>
+                    <li><a href="#roadmap">Дорожная карта</a></li>
+                    
+                </ol>
+            </div>
+
+            
+
+            <h2 id="history">1. История</h2>
+
+            <h3 id="creation">1.1. Создание</h3>
+            <p>История $BOLT началась в апреле 2022 года с запуска <a href="https://t.me/ton_furniture/3" target="_blank">NFT-коллекции Huebel arts</a> на блокчейне TON. В июне 2022 года сообщество приняло решение о <a href="https://t.me/ton_furniture/371" target="_blank">создании токена $BOLT</a>.<sup class="reference">[1]</sup></p>
+
+            <h3 id="development">1.2. Развитие</h3>
+            <p>В июле 2022 года $BOLT был впервые листингован на BITON, первой децентрализованной бирже (DEX) на TON. Однако из-за особенностей кода минтера $BOLT оказался слишком ресурсоемким для BITON, что привело к сбою биржи. После этого инцидента команда BITON приняла решение о переходе на сеть Polygon.<sup class="reference">[2]</sup></p>
+
+            <p>В этот же период метаданные Huebel Bolt были использованы в <a href="https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md" target="_blank">TEP64</a> (TON Enhancement Proposal) для стандарта токенов в репозитории TON.<sup class="reference">[3]</sup></p>
+
+            <h3>1.3. Листинги</h3>
+            <p>В ноябре 2022 года $BOLT был <a href="https://t.me/ton_furniture/804" target="_blank">размещен</a> на новой децентрализованной бирже <a href="https://dedust.io" target="_blank">DeDust</a>, которая успешно прошла тестирование и стала самой популярной DEX в экосистеме TON. В мае 2023 года токен был листингован на <a href="https://coinmarketcap.com/currencies/huebel-bolt/" target="_blank">CoinMarketCap</a>, а в июне 2023 года — на <a href="https://www.coingecko.com/en/coins/huebel-bolt" target="_blank">CoinGecko</a>.<sup class="reference">[4]</sup></p>
+
+            <h2 id="ecosystem">2. Экосистема</h2>
+
+            <h3>2.1. NFT коллекция</h3>
+            <p>Контр-культурная NFT коллекция <a href="https://getgems.io/collection/EQChyNfRCa7qCOtlRhjTbEi3Ok_IPnMXhlHyLjzqq27QXOaG" target="_blank">Huebel (TON Furniture)</a> ставит перед пользователями философский вопрос о природе NFT как искусства.<sup class="reference">[5]</sup></p>
+
+            <h3>2.2. Telegram каналы</h3>
+            <p>Экосистема $BOLT включает сеть <a href="https://t.me/boltfoundation/27" target="_blank">Telegram-каналов</a>, посвященных мемам, которые с юмором критикуют проекты TON и освещают ключевые проблемы отрасли. Основные каналы включают:</p>
+            <ul>
+                <li><a href="https://t.me/boltfoundation">BOLT Foundation</a></li>
+                <li><a href="https://t.me/ton_furniture">TON Furniture</a></li>
+                <li><a href="https://daitebolt.t.me">Дайте$BOLT</a></li>
+                <li><a href="https://t.me/thedailyton">The Daily TON</a></li>
+                <li><a href="https://t.me/boltoshi">Boltoshi Boltomoto</a></li>
+                <li><a href="https://t.me/george_boltovsky">George Boltovsky</a></li>
+            </ul>
+
+            <h3>2.3. Торговые площадки</h3>
+            <p>$BOLT доступен для хранения, передачи и обмена через следующие платформы:</p>
+            <ul>
+                <li><a href="https://t.me/tonRocketBot">xRocket</a> — первая централизованная биржа на Telegram в экосистеме TON, поддерживающая функции SocialFi, включая команды <code>+fire</code> и <code>+send</code></li>
+                <li><a href="https://dedust.io/swap/TON/BOLT">DeDust.io</a> — ведущая DEX на TON с крупнейшей пользовательской базой</li>
+                <li><a href="https://tonkeeper.com/">Tonkeeper</a> — кошелек с поддержкой $BOLT</li>
+            </ul>
+
+            <h2 id="technical">3. Технические характеристики</h2>
+            <p>$BOLT является Jetton-токеном, созданным на блокчейне TON с полным соответствием стандартам Web3. Токен использует следующие технические спецификации:</p>
+
+            <div class="tech-specs" style="margin: 1em 0; padding: 1em; background: #f8f9fa; border: 1px solid #a2a9b1;">
+                <ul>
+                    <li><b>Стандарт:</b> TEP-74 (The Open Network Enhancement Proposal)</li>
+                    <li><b>Смарт-контракт:</b> <code>EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw</code></li>
+                    <li><b>Тип токена:</b> Jetton (стандарт токенов TON)</li>
+                    <li><b>Функциональность SocialFi:</b> Поддержка команд <code>+fire</code> и <code>+send</code> в Telegram</li>
+                </ul>
+            </div>
+
+            <h2 id="tokenomics">4. Токеномика</h2>
+            <div class="tokenomics-section" style="margin: 1em 0; padding: 1em; background: #f8f9fa; border: 1px solid #a2a9b1;">
+                <h3>4.1. Распределение токенов</h3>
+                <p>По состоянию на 2024 год, распределение $BOLT представлено следующим образом:<sup class="reference">[7]</sup></p>
+                
+                <h4>Общая статистика:</h4>
+                <ul>
+                    <li>Общее количество в обращении: 4,778,432 BOLT </li>
+                    <li>Общее количество сожженных токенов: 1,096,365 BOLT 
+                        <ul>
+                            <li>Нулевой адрес: 125,203 BOLT</li>
+                            <li>Другие сжигания: 971,162 BOLT</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h4>Балансы бирж:</h4>
+                <ul>
+                    <li>xRocket CEX: 661,842 BOLT
+                        <ul><li>13.9% от общего предложения</li></ul>
+                    </li>
+                    <li>DeDust Vault: 397,602 BOLT
+                        <ul><li>8.3% от общего предложения</li></ul>
+                    </li>
+                </ul>
+
+                <h4>Распределение по холдерам:</h4>
+                <table style="width: 100%; border-collapse: collapse; margin: 1em 0;">
+                    <tr>
+                        <th style="text-align: left; padding: 8px; border: 1px solid #a2a9b1;">Категория</th>
+                        <th style="text-align: left; padding: 8px; border: 1px solid #a2a9b1;">Диапазон</th>
+                        <th style="text-align: left; padding: 8px; border: 1px solid #a2a9b1;">Количество холдеров</th>
+                        <th style="text-align: left; padding: 8px; border: 1px solid #a2a9b1;">Доля supply</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">🐗 КАБАН</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">>200,000 BOLT</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">2</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">17.7%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">💰 БОЛТОШИ</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">100,000-200,000 BOLT</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">8</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">30.3%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">🐋 КИТ-БОЛТОВЧАНИН</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">50,000-100,000 BOLT</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">9</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">18.1%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">💎 ХОЛДЕР-БОЛТОВЧАНИН</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">10,000-50,000 BOLT</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">44</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">26.7%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">⚡️ БОЛТОВЧАНИН</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">1,000-10,000 BOLT</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">33</td>
+                        <td style="padding: 8px; border: 1px solid #a2a9b1;">7.2%</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2 id="community">5. Сообщество</h2>
+            <h3>5.1. BOLT Foundation</h3>
+            <p>Основная команда разработчиков и управляющих проектом включает:</p>
+            <ul>
+                <li><b>Boltoshi Boltomoto</b> — Ведущий разработчик</li>
+                <li><b>userton</b> — Проектный менеджер</li>
+                <li><b>Consentor</b> — Член команды</li>
+                <li><b>nft tonovich</b> — Арт-директор</li>
+                <li><b>titi</b> — Маркетолог</li>
+                <li><b>Kotleta</b> — Менеджер сообщества</li>
+            </ul>
+
+            <h3>5.2. Поддерживающие проекты</h3>
+            <p>$BOLT поддерживается ключевыми проектами экосистемы TON:</p>
+            <ul>
+                <li><a href="https://dedust.io">DeDust.io</a> — Ведущая децентрализованная биржа на TON</li>
+                <li><a href="https://xrocket.t.me">xRocket</a> — Первая CEX в Telegram</li>
+                <li><a href="https://tonkeeper.com/">Tonkeeper</a> — Ведущий кошелек экосистемы</li>
+                <li><a href="https://ton.org">TON Foundation</a> — Основной разработчик блокчейна</li>
+                <li><a href="https://top.co/">TOP The Open Platform</a> — Платформа развития экосистемы</li>
+            </ul>
+
+            <h3>5.3. Дополнительные проекты экосистемы</h3>
+            <p>Помимо основных каналов, экосистема $BOLT включает следующие проекты:</p>
+            <ul>
+                <li><a href="https://t.me/dur_bolt">Durov's BOLT</a> — Информационный канал</li>
+                <li><a href="https://t.me/this_is_TON">This is TON</a> — Новостной ресурс</li>
+                <li><a href="https://t.me/CryptoKotletaChannel">CryptoKotleta Channel</a> — Аналитика</li>
+                <li><a href="https://t.me/george_boltovsky">George Boltovsky</a> — Образовательный контент</li>
+            </ul>
+ <!-- Add this section before the roadmap section -->
+ <section id="history" class="timeline lightskyblue ptb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading text-center pb-65">
+                    <h2>История $BOLT</h2>
+                    <div class="timeline-container">
+                        <!-- April 2022 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Апрель 2022</div>
+                            <div class="timeline-content">
+                                <p>Коллекция Huebel arts <a href="https://t.me/ton_furniture/3">была выпущена</a> как NFT на блокчейне TON</p>
+                            </div>
+                        </div>
+
+                        <!-- June 2022 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Июнь 2022</div>
+                            <div class="timeline-content">
+                                <p>Сообщество решает создать новый токен <a href="https://t.me/ton_furniture/371">$BOLT</a> для кошельков</p>
+                            </div>
+                        </div>
+
+                        <!-- July 2022 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Июль 2022</div>
+                            <div class="timeline-content">
+                                <p>$BOLT был изначально листнут на BITON, первой DEX на TON. Однако из-за багов в минтере $BOLT, токен оказался слишком ресурсоемким для BITON, что в итоге привело к краху биржи.</p>
+                            </div>
+                        </div>
+
+                        <!-- July Q2 2022 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Июль Q2 2022</div>
+                            <div class="timeline-content">
+                                <p>Метаданные Huebel Bolt используются в <a href="https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md">TEP64</a> как стандарт токенов в репозитории TON.</p>
+                            </div>
+                        </div>
+
+                        <!-- November 2022 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Ноябрь 2022</div>
+                            <div class="timeline-content">
+                                <p>$BOLT <a href="https://t.me/ton_furniture/804">был листнут</a> на новой DEX - <a href="https://dedust.io">DeDust</a>. DeDust успешно прошел наши тесты и стал самой популярной DEX на TON.</p>
+                            </div>
+                        </div>
+
+                        <!-- May 2023 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Май 2023</div>
+                            <div class="timeline-content">
+                                <p>$BOLT <a href="https://coinmarketcap.com/currencies/huebel-bolt/">был добавлен</a> на CoinMarketCap (CMC).</p>
+                            </div>
+                        </div>
+
+                        <!-- June 2023 -->
+                        <div class="timeline-item">
+                            <div class="timeline-date">Июнь 2023</div>
+                            <div class="timeline-content">
+                                <p>$BOLT <a href="https://www.coingecko.com/en/coins/huebel-bolt">был добавлен</a> на CoinGecko.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+            <h2 id="roadmap">6. Дорожная карта</h2>
+            <div class="roadmap-section" style="margin: 1em 0; padding: 1em; background: #f8f9fa; border: 1px solid #a2a9b1;">
+                <h3>2025</h3>
+                <ul>
+                    <li>Q1: Выпуск мерчандайза $BOLT</li>
+                    <li>Q2: Достижение паритета $BOLT > TON</li>
+                    <li>Q3: Реструктуризация The Open Network</li>
+                    <li>Q4: Внедрение системы защиты от скама</li>
+                </ul>
+                
+                <h3>2026</h3>
+                <ul>
+                    <li>Q1: Запуск блокчейна Huebel BOLT</li>
+                    <li>Q2: Ремайнтинг $BOLT</li>
+                    <li>Q3: Достижение паритета BOLT > BTC</li>
+                    <li>Q4: Усиление защиты от скама</li>
+                </ul>
+                
+                <h3>2027</h3>
+                <ul>
+                    <li>Q1: Запуск Furniture Factory</li>
+                    <li>Q2: Развитие художественного направления</li>
+                    <li>Q3: Дальнейшее развитие защиты от скама</li>
+                </ul>
+            </div>
+
+            <h2 id="references">7. Примечания</h2>
+            <ol>
+                <li>"История создания $BOLT", BOLT Foundation, 2022</li>
+                <li>"Технический анализ инцидента BITON", Журнал TON Development, 2022</li>
+                <li>"TEP64: Стандарт метаданных токенов", TON Repository, 2022</li>
+                <li>"Хронология листингов $BOLT", CoinGecko Data, 2023</li>
+                <li>"NFT как культурный феномен", TON Analytics, 2023</li>
+                <li>"$BOLT: От мема до культурного явления", Crypto Research, 2023</li>
+            </ol>
+
+            <div style="margin-top: 20px; padding: 10px; background: #f8f9fa; border: 1px solid #a2a9b1;">
+                <b>См. также:</b>
+                <ul>
+                    <li><a href="https://ton.org">TON (блокчейн)</a></li>
+                    <li><a href="https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md">Jetton (стандарт токенов)</a></li>
+                    
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bolt = document.querySelector('.bolt-logo img');
+            
+            // Initial animation on page load
+            bolt.classList.add('spinning');
+            
+            // Click handler
+            bolt.addEventListener('click', () => {
+                if (!bolt.classList.contains('spinning')) {
+                    bolt.classList.add('spinning');
+                    
+                    bolt.addEventListener('animationend', function handler() {
+                        bolt.classList.remove('spinning');
+                        bolt.removeEventListener('animationend', handler);
+                    });
+                }
+            });
+            
+            // Remove initial animation class after it completes
+            bolt.addEventListener('animationend', function handler() {
+                bolt.classList.remove('spinning');
+                bolt.removeEventListener('animationend', handler);
+            });
+        });
+
+        // Updated smooth scroll functionality
+        document.querySelectorAll('.toc a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const headerOffset = 70; // Height of sticky header
+                    const elementPosition = window.pageYOffset + targetElement.getBoundingClientRect().top - headerOffset;
+                    const scrollDuration = 500;
+                    const scrollStep = (elementPosition - window.pageYOffset) / (scrollDuration / 15);
+                    
+                    const scrollInterval = setInterval(() => {
+                        if (Math.abs(elementPosition - window.pageYOffset) > Math.abs(scrollStep)) {
+                            window.scrollBy(0, scrollStep);
+                        } else {
+                            window.scrollTo(0, elementPosition);
+                            clearInterval(scrollInterval);
+                        }
+                    }, 15);
+                }
+            });
+        });
+    </script>
+    <script src="https://widgets.coingecko.com/gecko-coin-price-chart-widget.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const bolts = document.querySelectorAll('.bolt-scroll img');
+    
+    // Initial state - all bolts at top
+    bolts.forEach(bolt => {
+        bolt.style.transform = 'translateY(0)';
+    });
+
+    // Click handler for each bolt
+    bolts.forEach(bolt => {
+        bolt.addEventListener('click', function() {
+            if (!this.classList.contains('hammered-in')) {
+                // Hammer down
+                this.classList.remove('pulled-out');
+                this.classList.add('hammered-in');
+                
+                // Add shake effect to simulate impact
+                setTimeout(() => {
+                    const row = document.querySelector('.top-bolt-row');
+                    row.style.transform = 'translateX(1px)';
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(-1px)';
+                        setTimeout(() => {
+                            row.style.transform = 'translateX(0)';
+                        }, 50);
+                    }, 50);
+                }, 300);
+            } else {
+                // Pull up
+                this.classList.remove('hammered-in');
+                this.classList.add('pulled-out');
+            }
+        });
+    });
+});
+    </script>
+    <div class="back-to-top">
+        <img src="about-2.png" alt="Back to top">
+    </div>
+    <script>
+        // Back to top functionality
+        const backToTop = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            const scrollDuration = 500;
+            const scrollStep = -window.scrollY / (scrollDuration / 15);
+            
+            const scrollInterval = setInterval(() => {
+                if (window.scrollY !== 0) {
+                    window.scrollBy(0, scrollStep);
+                } else {
+                    clearInterval(scrollInterval);
+                }
+            }, 15);
+        });
+    </script>
+
+   
+</body>
+</html> 

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeDust.io | Болтопедия</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #202122;
+        }
+
+        h1, h2, h3, h4, .article-title h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .article-title h1 {
+            font-size: 3.2em;
+            margin-bottom: 0.3em;
+        }
+
+        h2 {
+            font-size: 2.4em;
+            margin-top: 1.5em;
+        }
+
+        h3 {
+            font-size: 2em;
+            color: #2c3e50;
+        }
+
+        .hatnote {
+            font-family: 'JetBrains Mono', monospace;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Update the image layout */
+        .main-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 2em auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .infobox {
+            float: right;
+            margin: 0 0 1em 1em;
+            width: 300px;
+            background: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-radius: 4px;
+            padding: 1em;
+        }
+
+        /* ... rest of the existing styles ... */
+
+        @keyframes helicopter {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(2160deg);
+            }
+        }
+        
+        .bolt-logo img {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transform-origin: center;
+        }
+        
+        .spinning {
+            animation: helicopter 1.5s cubic-bezier(0.3, 0, 0.7, 1) forwards;
+        }
+
+        /* Additional styles for DeDust page */
+        .dedust-image {
+            max-width: 100%;
+            height: auto;
+            margin: 1em 0;
+            border: 1px solid #a2a9b1;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 1em;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .external-links {
+            margin: 2em 0;
+            padding: 1em;
+            background: #f8f9fa;
+            border: 1px solid #a2a9b1;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table thead {
+            background: #f8f9fa;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            border: 1px solid #e1e4e8;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: #24292e;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: #f6f8fa;
+        }
+
+        /* Update technical content fonts */
+        .comparison-table th,
+        .code-block,
+        .tech-block code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Add new navigation styling */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+        }
+
+        /* Hand-drawn border effect */
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #333;
+            border-radius: 0;
+            transform: skew(-1deg) rotate(0.5deg);
+            transition: all 0.2s ease;
+        }
+
+        /* "Nail" effect in corners */
+        .nav-links a::after {
+            content: '•';
+            position: absolute;
+            font-size: 8px;
+            color: #333;
+            top: 4px;
+            left: 4px;
+        }
+
+        /* Hover effects */
+        .nav-links a:hover::before {
+            transform: skew(1deg) rotate(-0.5deg);
+            border-color: #000;
+        }
+
+        .nav-links a:hover {
+            color: #000;
+            transform: translateY(-1px);
+        }
+
+        /* Left sidebar specific */
+        .left-sidebar .nav-links {
+            flex-direction: column;
+        }
+
+        .left-sidebar .nav-links a {
+            margin: 4px 0;
+            width: fit-content;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: scale(0.9);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .back-to-top img {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-to-top:hover img {
+            transform: translateY(-5px) rotate(-10deg);
+        }
+
+        /* Top bolt row styling */
+        .top-bolt-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            height: 60px;
+            width: 100%;
+        }
+
+        .bolt-scroll {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: auto;
+            position: static;
+        }
+
+        .top-bolt-row img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Sticky header styles */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+            font-size: 0.85em;
+        }
+
+        /* Ensure content flows under sticky header */
+        body {
+            overflow-y: auto;
+        }
+
+        /* Update content wrapper to match other pages */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;  /* Change from flex to grid */
+            grid-template-columns: 160px 1fr;  /* Add grid columns */
+            gap: 20px;
+        }
+
+        /* Remove or update conflicting styles */
+        .left-sidebar {
+            padding: 20px;
+            /* Remove any width or flex properties */
+        }
+
+        .main-content {
+            background: white;
+            padding: 25px;
+            border: 1px solid #a7d7f9;
+            border-radius: 2px;
+            /* Remove any width or margin properties */
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="content-wrapper">
+            <div></div>
+            <div class="top-bolt-row">
+                <div class="bolt-scroll">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                    <img src="about-2.png" alt="Bolt" class="bolt">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="left-sidebar">
+            
+            <div class="bolt-logo">
+                <img src="about-2.png" alt="Болтопедия Logo" class="floating-bolt">
+            </div>
+            <div class="wiki-header">BOLTopedia</div>
+            <nav class="nav-links">
+                <a href="index.html">BOLT</a>
+                <a href="introduction.html">КАБАН</a>
+                <a href="dedust.html">DeDust</a>
+                <a href="ton.html">TON</a>
+                <a href="boltgames.html">GAMES</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            
+            <div class="article-title">
+                <h1>DeDust<img src="dust.logo.gif" alt="DeDust Logo" style="width: 15px; height: 15px; margin-bottom: 0px;">io</h1>
+            </div>
+            <script src="https://widgets.coingecko.com/gecko-coin-price-chart-widget.js"></script>
+            <gecko-coin-price-chart-widget locale="en" transparent-background="true" outlined="true" coin-id="scaleton" initial-currency="usd"></gecko-coin-price-chart-widget>
+            <div class="hatnote">
+                Децентрализованная биржа на блокчейне TON
+            </div>
+
+            <div>
+                DeDust - это децентрализованная биржа на блокчейне TON. Считается самой продвинутым DEXом на TON. Существует с 2022 года, но в 2024 году был переработан и обновлен. Ниже можно ознакомиться с технической документацией и инструкцией по использованию. Также в этой статье описаны основные фичи даста. 
+                
+            </div>
+
+            <div class="infobox">
+                <div class="infobox-title">DeDust.io</div>
+                <img src="681e2e6-dedust_1.png" alt="DeDust Interface" style="width: 100%; margin-bottom: 10px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <th colspan="2" style="text-align: center; background: #eaecf0;">Общая информация</th>
+                    </tr>
+                    <tr>
+                        <td>Тип:</td>
+                        <td>Децентрализованная биржа (DEX)</td>
+                    </tr>
+                    <tr>
+                        <td>Блокчейн:</td>
+                        <td>TON</td>
+                    </tr>
+                    <tr>
+                        <td>Протокол:</td>
+                        <td>DeDust Protocol 2.0</td>
+                    </tr>
+                    <tr>
+                        <td>Статус:</td>
+                        <td><span class="bolt-category" style="color: #1c9111;">АКТИВЕН</span></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: center; background: #eaecf0;">Технические детали</th>
+                    </tr>
+                    <tr>
+                        <td>Тип пулов:</td>
+                        <td>
+                            <ul style="margin: 0; padding-left: 1.2em;">
+                                <li>Volatile Pool</li>
+                                <li>Stable-Swap Pool</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Поддержка активов:</td>
+                        <td>
+                            <ul style="margin: 0; padding-left: 1.2em;">
+                                <li>TON (нативный)</li>
+                                <li>Jettons</li>
+                                <li>Extra-currencies</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="text-align: center; background: #eaecf0;">Ресурсы</th>
+                    </tr>
+                    <tr>
+                        <td>Сайт:</td>
+                        <td><a href="https://dedust.io">dedust.io</a></td>
+                    </tr>
+                    <tr>
+                        <td>Документация:</td>
+                        <td><a href="https://docs.dedust.io/docs/getting-started">SDK Docs</a></td>
+                    </tr>
+                    <tr>
+                        <td>GitHub:</td>
+                        <td><a href="https://github.com/dedust-io">dedust-io</a></td>
+                    </tr>
+                    <tr>
+                        <td>Telegram:</td>
+                        <td><a href="https://t.me/dedust">@dedust</a></td>
+                    </tr>
+                    <tr>
+                        <td>Аналитика:</td>
+                        <td><a href="https://www.geckoterminal.com/ton/dedust/pools">GeckoTerminal</a></td>
+                    </tr>
+                </table>
+                <div style="font-size: 0.9em; font-style: italic; margin-top: 10px; text-align: center;">
+                    "Самый продвинутый DEX на TON"
+                </div>
+            </div>
+
+            <div class="toc">
+                <h2>Содержание</h2>
+                <ol>
+                    <li><a href="#overview">Обзор</a>
+                        <ol>
+                            <li><a href="#protocol">Протокол DeDust 2.0</a></li>
+                            <li><a href="#features">Особенности и преимущества</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#liquidity">Ликвидность</a>
+                        <ol>
+                            <li><a href="#providers">Провайдеры ликвидности</a></li>
+                            
+                            <li><a href="#price-impact">Price Impact и Slippage</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#technical">Технические аспекты</a>
+                        <ol>
+                            <li><a href="#wallets">Поддерживаемые кошельки</a></li>
+                            <li><a href="#wrapped">Обернутые токены</a></li>
+                            <li><a href="#stablecoins">Стейблкоины</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#practical">Практическое использование</a>
+                        <ol>
+                            <li><a href="#profit-calc">Расчет прибыли в пулах</a></li>
+                            <li><a href="#trading">Особенности торговли</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#security">Безопасность и риски</a>
+                        <ol>
+                            <li><a href="#rugpull">Защита от рагпулов</a></li>
+                            <li><a href="#security-tips">Рекомендации по безопасности</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#tech-infra">Технология и инфраструктура</a>
+                        <ol>
+                            <li><a href="#validators">Валидаторы и номинаторы</a></li>
+                            <li><a href="#nodes">Ноды блокчейна</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#dex-features">Особенности работы DEX</a>
+                        <ol>
+                            <li><a href="#cex-comparison">Сравнение с CEX</a></li>
+                            <li><a href="#dex-protocols">Протоколы DEX</a></li>
+                        </ol>
+                    </li>
+                    
+                </ol>
+            </div>
+
+            <h2 id="overview">1. Обзор</h2>
+
+            <h3 id="protocol">1.1. Протокол DeDust 2.0</h3>
+            <p>DeDust использует протокол второго поколения (V2), который позволяет создавать торговые пары между любыми активами, включая стейблкоины. В отличие от протоколов первого поколения, где все пары обязательно включают нативную монету, DeDust обеспечивает большую гибкость в создании торговых пар.</p>
+
+            <h3 id="features">1.2. Особенности и преимущества</h3>
+            <ul>
+                <li>Поддержка различных типов пулов (Volatile и Stable-Swap)</li>
+                <li>Интеграция с основными TON-кошельками</li>
+                <li>Автоматический маркет-мейкинг (AMM)</li>
+                <li>Возможность создания пользовательских пулов ликвидности</li>
+            </ul>
+
+            <h2 id="liquidity">2. Ликвидность</h2>
+
+            <h3 id="providers">2.1. Провайдеры ликвидности</h3>
+            <p>При внесении торговой пары в пул, провайдеры получают LP-токены (Liquidity Provider токены). Каждый LP-токен представляет долю в пуле и со временем увеличивает свою ценность за счет комиссий от торговли.</p>
+
+            <div class="info-block">
+                <h4>Формула доходности:</h4>
+                <p>Провайдеры ликвидности получают 0.5% от каждой сделки. Индивидуальный доход зависит от доли в пуле.</p>
+                <p>Пример: При доле в пуле 20%, провайдер получает 0.1% от всех комиссий биржи.</p>
+            </div>
+
+            <h3 id="price-impact">2.2. Price Impact и Slippage</h3>
+            <div class="warning-block">
+                <h4>Важно понимать разницу:</h4>
+                <ul>
+                    <li><strong>Price Impact</strong> — процент активов, который вы недополучите в результате сделки из-за размера транзакции относительно пула</li>
+                    <li><strong>Slippage</strong> — допустимое отклонение цены в момент исполнения транзакции</li>
+                </ul>
+            </div>
+
+            <h2 id="technical">3. Технические аспекты</h2>
+
+            <h3 id="wallets">3.1. Поддерживаемые кошельки</h3>
+            <ul>
+                <li>Tonkeeper — наиболее популярный кошелек с поддержкой NFT и встроенным браузером</li>
+                <li>Tonhub — включает встроенный стейкинг и управление LP-токенами</li>
+                <li>MyTonWallet — поддержка TON DNS и TON Proxy</li>
+                <li>JUSTON — встроенная интеграция с DeDust</li>
+                <li>OpenMask — браузерное расширение для доступа к dApps</li>
+            </ul>
+
+            <h3 id="wrapped">3.2. Обернутые токены</h3>
+            <p>DeDust использует JTON (обернутый TON) для обеспечения работы протокола V2. Это позволяет создавать торговые пары между любыми активами без обязательной привязки к нативному TON.</p>
+
+            <h3 id="stablecoins">3.3. Стейблкоины</h3>
+            <p>Стейблкоины — это криптовалюты, цена которых привязана к стоимости определенного актива, например, доллара США. В сети TON стейблкоины представлены в виде Jetton-токенов.</p>
+
+            <div class="info-block">
+                <h4>Особенности стейблкоинов на DeDust:</h4>
+                <ul>
+                    <li>Позволяют защититься от волатильности рынка</li>
+                    <li>Обеспечивают быстрые международные переводы</li>
+                    <li>Интегрируются через мост RSquad</li>
+                    <li>Ожидается поддержка TON Trustless Bridge в Q3</li>
+                </ul>
+            </div>
+
+            <h2 id="practical">4. Практическое использование</h2>
+
+            <h3 id="profit-calc">4.1. Расчет прибыли в пулах ликвидности</h3>
+            <div class="example-block">
+                <h4>Пример расчета:</h4>
+                <p>Если у вас в пуле 1000 TON и 500 SCALE:</p>
+                <ul>
+                    <li>1 SCALE = 500 / 1000 = 2 TON</li>
+                    <li>Чем больше TON в соотношении монет в пуле, тем стабильнее цена</li>
+                    <li>Сложнее осуществлять резкие изменения цены (pump и dump)</li>
+                </ul>
+            </div>
+
+            <h3 id="trading">4.2. Особенности торговли</h3>
+            <div class="warning-block">
+                <h4>Рекомендации по торговле:</h4>
+                <ul>
+                    <li>При установке Slippage >5%, будьте готовы к значительным отклонениям от ожидаемой суммы</li>
+                    <li>Expert Mode позволяет совершать сделки с Price Impact более 15%</li>
+                    <li>Slippage рассчитывается от суммы с учетом Price Impact</li>
+                </ul>
+            </div>
+
+            <h2 id="security">5. Безопасность и риски</h2>
+
+            <h3 id="rugpull">5.1. Защита от рагпулов</h3>
+            <p>Рагпул (rugpull) — вид мошенничества, когда создатели токена продают все монеты, резко обрушивая курс. Для защиты рекомендуется:</p>
+            <ul>
+                <li>Исследовать происхождение токена</li>
+                <li>Изучать проект и его ценность</li>
+                <li>Использовать риск-менеджмент</li>
+                <li>Проверять токеномику проекта</li>
+            </ul>
+
+            <h3 id="security-tips">5.2. Рекомендации по безопасности</h3>
+            <div class="security-block">
+                <h4>Основные правила:</h4>
+                <ul>
+                    <li>Используйте только проверенные кошельки с официального сайта ton.org/wallets</li>
+                    <li>Проверяйте адреса контрактов через надежные источники</li>
+                    <li>Не забывайте про seed-фразу, она совместима со всеми TON-кошельками</li>
+                    <li>Внимательно проверяйте параметры транзакций перед подтверждением</li>
+                </ul>
+            </div>
+
+            <h2 id="tech-infra">7. Технология и инфраструктура</h2>
+
+            <h3 id="validators">7.1. Валидаторы и номинаторы</h3>
+            <div class="tech-block">
+                <p>В основе работы DeDust, как и всей сети TON, лежит механизм Proof-of-Stake, где ключевую роль играют:</p>
+                <ul>
+                    <li><strong>Валидаторы</strong>:
+                        <ul>
+                            <li>Проверяют транзакции и создают новые блоки</li>
+                            <li>Блокируют токены в качестве залога (стейкинг)</li>
+                            <li>Получают вознаграждение за поддержание сети</li>
+                            <li>Могут быть оштрафованы за нарушение правил</li>
+                        </ul>
+                    </li>
+                    <li><strong>Номинаторы</strong>:
+                        <ul>
+                            <li>Поддерживают валидаторов своими токенами</li>
+                            <li>Получают часть вознаграждения валидаторов</li>
+                            <li>Помогают обеспечивать децентрализацию сети</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h3 id="nodes">7.2. Ноды блокчейна</h3>
+            <div class="tech-block">
+                <h4>Основные функции нод:</h4>
+                <ul>
+                    <li>Верификация транзакций</li>
+                    <li>Хранение данных блокчейна</li>
+                    <li>Участие в консенсусе</li>
+                    <li>Обеспечение сетевой безопасности</li>
+                    <li>Участие в голосовании и управлении сетью</li>
+                </ul>
+            </div>
+
+            <h2 id="dex-features">8. Особенности работы DEX</h2>
+
+            <h3 id="cex-comparison">8.1. Сравнение с CEX</h3>
+            <div class="comparison-block">
+                <h4>Централизованные биржи (CEX):</h4>
+                <ul>
+                    <li>Работают через посредника</li>
+                    <li>Используют книгу ордеров (orderbook)</li>
+                    <li>Требуют KYC/AML</li>
+                </ul>
+
+                <h4>Децентрализованные биржи (DEX):</h4>
+                <ul>
+                    <li>Работают на смарт-контрактах</li>
+                    <li>Используют AMM (Automated Market Making)</li>
+                    <li>Не требуют верификации личности</li>
+                </ul>
+            </div>
+
+            <h3 id="dex-protocols">8.2. Протоколы DEX</h3>
+            <div class="protocol-block">
+                <h4>V1 протокол:</h4>
+                <ul>
+                    <li>Все пары включают нативную монету</li>
+                    <li>Зависимость от цены базового актива</li>
+                    <li>Используется в Tegro.Finance и TonSwap</li>
+                </ul>
+
+                <h4>V2 протокол (DeDust):</h4>
+                <ul>
+                    <li>Поддержка любых торговых пар</li>
+                    <li>Использование обернутых токенов (JTON)</li>
+                    <li>Большая гибкость в создании пулов</li>
+                </ul>
+            </div>
+
+            <h3>8.3. Работа с токенами</h3>
+            <div class="token-block">
+                <h4>Создание и управление Jetton'ами:</h4>
+                <ul>
+                    <li>Использование minter.ton.org для базового создания</li>
+                    <li>Возможность кастомизации под конкретные задачи</li>
+                    <li>Важность проработанной токеномики</li>
+                </ul>
+
+                <h4>Рекомендации по созданию токенов:</h4>
+                <ul>
+                    <li>Изучение рынка и конкурентов</li>
+                    <li>Продуманная токеномика всей эмиссии</li>
+                    <li>Определение ценности токена на рынке</li>
+                    <li>Обеспечение достаточной ликвидности</li>
+                </ul>
+            </div>
+
+            <h2>9. Детальная механика LP-токенов</h2>
+
+            <h3>9.1. Принцип работы LP-токенов</h3>
+            <div class="lp-mechanics-block">
+                <p>LP-токены (Liquidity Provider токены) — это цифровые активы, которые пользователи получают в обмен на предоставление ликвидности в пул. Каждый LP-токен представляет пропорциональную долю в пуле ликвидности.</p>
+                
+                <h4>Основные характеристики:</h4>
+                <ul>
+                    <li>Автоматически генерируются при внесении ликвидности</li>
+                    <li>Представляют право на долю в пуле и комиссиях</li>
+                    <li>Могут быть переданы другим пользователям</li>
+                    <li>При выводе сжигаются в обмен на базовые активы</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Пример расчета доходности:</h4>
+                    <p>При обороте пула в 100,000 TON в день:</p>
+                    <ul>
+                        <li>Комиссия пула (0.5%): 500 TON</li>
+                        <li>Ваша доля в пуле (20%): 100 TON в день</li>
+                        <li>Месячный доход: ≈3,000 TON</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>9.2. Факторы успешного LP</h3>
+            <ul>
+                <li>Высокий суточный оборот торговой пары</li>
+                <li>Значительная доля в пуле</li>
+                <li>Длительность нахождения в пуле</li>
+                <li>Стабильность соотношения активов</li>
+            </ul>
+
+            <h2>10. Обернутые токены и протоколы</h2>
+
+            <h3>10.1. Сравнение JTON, WTON и нативного TON</h3>
+            <div class="wrapped-tokens-block">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Токен</th>
+                            <th>Использование</th>
+                            <th>Особенности</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TON</strong></td>
+                            <td>Нативная монета блокчейна</td>
+                            <td>Базовый актив для транзакций и газа</td>
+                        </tr>
+                        <tr>
+                            <td><strong>JTON</strong></td>
+                            <td>DeDust DEX</td>
+                            <td>Оптимизирован для V2 протокола DeDust</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WTON</strong></td>
+                            <td>Другие DEX (Megaton.Finance, STON.fi)</td>
+                            <td>Стандартный wrapped-токен</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>10.2. Особенности протоколов</h3>
+            <div class="protocol-details-block">
+                <h4>V1 vs V2 на примере:</h4>
+                <p>Возьмем токен XCOIN в пуле с 10,000 XCOIN и 1,000 TON:</p>
+                <ul>
+                    <li><strong>В протоколе V1:</strong>
+                        <ul>
+                            <li>10 XCOIN = 1 TON</li>
+                            <li>При падении TON на 10%, XCOIN также падает на 10%</li>
+                            <li>TVL пула падает на все 20%</li>
+                        </ul>
+                    </li>
+                    <li><strong>В протоколе V2:</strong>
+                        <ul>
+                            <li>Цена XCOIN может быть привязана к стейблкоину</li>
+                            <li>Независимость от колебаний TON</li>
+                            <li>Более стабильный TVL</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>11. Подробное сравнение кошельков</h2>
+
+            <div class="wallet-comparison-block">
+                <h3>11.1. Tonkeeper</h3>
+                <ul>
+                    <li>✅ Встроенный браузер dApps</li>
+                    <li>✅ Отображение NFT</li>
+                    <li>✅ Интуитивный интерфейс</li>
+                    <li>❌ Нет управления LP-токенами</li>
+                </ul>
+
+                <h3>11.2. Tonhub</h3>
+                <ul>
+                    <li>✅ Встроенный стейкинг</li>
+                    <li>✅ Управление LP-токенами</li>
+                    <li>✅ Простой интерфейс</li>
+                    <li>❌ Нет браузера и NFT</li>
+                </ul>
+
+                <h3>11.3. MyTonWallet</h3>
+                <ul>
+                    <li>✅ TON DNS и TON Proxy</li>
+                    <li>✅ Мультиаккаунт</li>
+                    <li>✅ Расширенные функции</li>
+                    <li>❌ Сложнее для новичков</li>
+                </ul>
+            </div>
+
+            <h2>12. Расчет Price Impact</h2>
+
+            <div class="price-impact-block">
+                <h3>12.1. Практический пример</h3>
+                <div class="calculation-example">
+                    <h4>Сценарий:</h4>
+                    <p>Покупка SCALE на 100 TON при цене 1 TON = 10 SCALE</p>
+                    
+                    <h4>Расчет:</h4>
+                    <ul>
+                        <li>Ожидаемое количество: 1,000 SCALE</li>
+                        <li>Реальное получение: 800 SCALE</li>
+                        <li>Price Impact: (1000 - 800) / 1000 * 100% = 20%</li>
+                    </ul>
+
+                    <div class="warning-note">
+                        <p>⚠️ При большом Price Impact:</p>
+                        <ul>
+                            <li>Разделите крупную сделку на несколько мелких</li>
+                            <li>Дождитесь пополнения ликвидности</li>
+                            <li>Используйте другие торговые пары</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="external-links">
+                <h3>Полезные ссылки</h3>
+                <ul>
+                    <li>📚 <a href="https://docs.dedust.io/docs/getting-started">DeDust SDK Documentation</a></li>
+                    <li>💻 <a href="https://github.com/dedust-io">GitHub Repository</a></li>
+                    <li>💬 <a href="https://t.me/dedust">Telegram Channel</a></li>
+                    <li>🌐 <a href="https://dedust.io">Official Website</a></li>
+                    <li>📊 <a href="https://www.geckoterminal.com/ton/dedust/pools">Pools on GeckoTerminal</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-to-top">
+        <img src="about-2.png" alt="Наверх">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bolt = document.querySelector('.bolt-logo img');
+            
+            // Initial animation on page load
+            bolt.classList.add('spinning');
+            
+            // Click handler
+            bolt.addEventListener('click', () => {
+                if (!bolt.classList.contains('spinning')) {
+                    bolt.classList.add('spinning');
+                    
+                    bolt.addEventListener('animationend', function handler() {
+                        bolt.classList.remove('spinning');
+                        bolt.removeEventListener('animationend', handler);
+                    });
+                }
+            });
+            
+            // Remove initial animation class after it completes
+            bolt.addEventListener('animationend', function handler() {
+                bolt.classList.remove('spinning');
+                bolt.removeEventListener('animationend', handler);
+            });
+        });
+
+        // Back to top functionality
+        const backToTop = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            const scrollDuration = 500;
+            const scrollStep = -window.scrollY / (scrollDuration / 15);
+            
+            const scrollInterval = setInterval(() => {
+                if (window.scrollY !== 0) {
+                    window.scrollBy(0, scrollStep);
+                } else {
+                    clearInterval(scrollInterval);
+                }
+            }, 15);
+        });
+
+        // Updated smooth scroll functionality
+        document.querySelectorAll('.toc a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const headerOffset = 70; // Height of sticky header
+                    const elementPosition = window.pageYOffset + targetElement.getBoundingClientRect().top - headerOffset;
+                    const scrollDuration = 500;
+                    const scrollStep = (elementPosition - window.pageYOffset) / (scrollDuration / 15);
+                    
+                    const scrollInterval = setInterval(() => {
+                        if (Math.abs(elementPosition - window.pageYOffset) > Math.abs(scrollStep)) {
+                            window.scrollBy(0, scrollStep);
+                        } else {
+                            window.scrollTo(0, elementPosition);
+                            clearInterval(scrollInterval);
+                        }
+                    }, 15);
+                }
+            });
+        });
+    </script>
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+    const bolts = document.querySelectorAll('.bolt-scroll img');
+    
+    // Initial state - all bolts at top
+    bolts.forEach(bolt => {
+        bolt.style.transform = 'translateY(0)';
+    });
+
+    // Click handler for each bolt
+    bolts.forEach(bolt => {
+        bolt.addEventListener('click', function() {
+            if (!this.classList.contains('hammered-in')) {
+                // Hammer down
+                this.classList.remove('pulled-out');
+                this.classList.add('hammered-in');
+                
+                // Add shake effect to simulate impact
+                setTimeout(() => {
+                    const row = document.querySelector('.top-bolt-row');
+                    row.style.transform = 'translateX(1px)';
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(-1px)';
+                        setTimeout(() => {
+                            row.style.transform = 'translateX(0)';
+                        }, 50);
+                    }, 50);
+                }, 300);
+            } else {
+                // Pull up
+                this.classList.remove('hammered-in');
+                this.classList.add('pulled-out');
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html> 
