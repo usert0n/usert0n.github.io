@@ -280,7 +280,7 @@ blockquote {
         flex-direction: column;
         align-items: center;  /* Center all sidebar content */
         width: 100%;
-        padding: 15px;
+        padding: 10px;
         background: var(--bg-light);
         border-bottom: 1px solid var(--border-color);
     }
@@ -288,11 +288,21 @@ blockquote {
     /* Force mobile navigation styles */
     .nav-links {
         display: flex;
-        flex-direction: row !important;  /* Force horizontal layout */
+        flex-direction: row !important;
+        flex-wrap: wrap !important;  /* Allow wrapping */
         justify-content: center !important;
-        gap: 10px;
-        width: auto !important;  /* Let it take natural width */
+        gap: 5px;
+        width: 100% !important;
         margin: 10px auto !important;
+        padding: 0 5px;
+    }
+
+    .nav-links a {
+        min-width: 80px;
+        text-align: center;
+        padding: 8px 12px;
+        margin: 3px;
+        font-size: 0.9em;
     }
 
     /* Smooth mobile layout */
@@ -312,39 +322,56 @@ blockquote {
         background: rgba(248, 249, 250, 0.95);
     }
 
-    /* Modern mobile navigation */
-    .nav-links a {
-        width: auto !important;  /* Override any fixed widths */
-        min-width: 100px;
-        text-align: center;
-        padding: 12px 20px;
-        margin: 5px;
-        border-radius: 8px;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* Adjust top bolt row */
+    .top-bolt-row {
+        height: 40px;
+    }
+    
+    .bolt-scroll img {
+        width: 20px;
+        height: 20px;
     }
 
-    /* Adjust logo and header for mobile */
-    .bolt-logo {
-        margin: 10px auto;
+    /* Adjust logo size */
+    .bolt-logo img {
+        width: 60px;
+        height: 60px;
     }
 
+    /* Adjust header text */
     .wiki-header {
-        margin: 10px 0;
-        text-align: center;
+        font-size: 1.2em;
     }
 
-    /* Enhanced mobile content */
+    /* Make content more compact */
     .main-content {
-        padding: 15px;
-        margin: 0;
-        border: none;
-        border-radius: 0;
+        padding: 10px;
+    }
+
+    .game-container {
+        margin: 20px 0;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Adjust game elements */
+    #find-bolt-grid, 
+    #game-area,
+    #flappy-game {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .game-stats {
+        font-size: 18px !important;
+        margin: 10px 0;
     }
 
     /* Improved mobile typography */
     .article-title h1 {
-        font-size: 1.8em;
+        font-size: 2em;
         line-height: 1.2;
         padding: 10px 0;
     }
@@ -353,7 +380,7 @@ blockquote {
     .infobox {
         float: none;
         width: 100%;
-        margin: 1.5em 0;
+        margin: 1em 0;
         border-radius: 12px;
         overflow: hidden;
     }
@@ -434,6 +461,63 @@ blockquote {
     html {
         -webkit-overflow-scrolling: touch;
     }
+
+    /* Prevent horizontal scrolling on all screen sizes */
+    html, body {
+        overflow-x: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    /* Game container adjustments */
+    .game-container {
+        margin: 20px 0;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Canvas adjustments */
+    #gameCanvas {
+        width: 100%;
+        max-height: 70vh;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Game grid adjustments */
+    #find-bolt-grid, 
+    #game-area,
+    #flappy-game {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Game stats and counters */
+    .score-counter,
+    .bolt-counter,
+    .game-stats {
+        font-size: 18px !important;
+        margin: 10px 0;
+    }
+
+    /* Start prompts */
+    #start-prompt {
+        font-size: 18px !important;
+        padding: 10px !important;
+        width: 80% !important;
+        max-width: 300px !important;
+        left: 50%;
+        transform: translate(-50%, -50%) !important;
+        box-sizing: border-box;
+        position: absolute !important;
+        z-index: 100 !important;
+        background: rgba(255,255,255,0.95) !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        text-align: center !important;
+        pointer-events: none;
+    }
 }
 
 /* Additional mobile optimizations for smaller screens */
@@ -461,6 +545,31 @@ blockquote {
     .toc a,
     .back-to-top {
         min-height: 44px; /* iOS minimum touch target size */
+    }
+}
+
+/* Additional adjustments for very small screens */
+@media screen and (max-width: 360px) {
+    .nav-links a {
+        min-width: 70px;
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
+
+    .game-container {
+        padding: 5px;
+    }
+
+    .score-counter,
+    .bolt-counter,
+    .game-stats {
+        font-size: 16px !important;
+    }
+
+    #start-prompt {
+        font-size: 16px !important;
+        padding: 8px !important;
+        width: 90% !important;
     }
 }
 
