@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOLT Fight Club</title>
+    <link rel="stylesheet" href="boltfight.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Character Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat-box">
+                <div class="stat-label">Уровень</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Опыт</div>
+                <div class="stat-value" id="exp">0/100</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Болты</div>
+                <div class="stat-value" id="bolts">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Здоровье</div>
+                <div class="stat-value" id="health">100/100</div>
+            </div>
+        </div>
+
+        <!-- Game World -->
+        <div class="game-world">
+            <!-- Map Grid -->
+            <div class="map-grid" id="mapGrid"></div>
+            
+            <!-- Combat Interface (Hidden by default) -->
+            <div class="combat-interface" id="combatInterface" style="display: none;">
+                <div class="combat-stats">
+                    <div class="player-stats">
+                        <div class="health-bar">
+                            <div class="health-fill" id="playerHealth"></div>
+                        </div>
+                        <div class="player-name">Вы</div>
+                    </div>
+                    <div class="enemy-stats">
+                        <div class="health-bar">
+                            <div class="health-fill" id="enemyHealth"></div>
+                        </div>
+                        <div class="enemy-name" id="enemyName">Противник</div>
+                    </div>
+                </div>
+                
+                <div class="combat-zones">
+                    <div class="attack-zones">
+                        <div class="zone" data-zone="head">Голова</div>
+                        <div class="zone" data-zone="chest">Грудь</div>
+                        <div class="zone" data-zone="stomach">Живот</div>
+                        <div class="zone" data-zone="waist">Пояс</div>
+                        <div class="zone" data-zone="legs">Ноги</div>
+                    </div>
+                    <div class="block-zones">
+                        <div class="zone" data-zone="head">Блок головы</div>
+                        <div class="zone" data-zone="chest">Блок груди</div>
+                        <div class="zone" data-zone="stomach">Блок живота</div>
+                        <div class="zone" data-zone="waist">Блок пояса</div>
+                        <div class="zone" data-zone="legs">Блок ног</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Character Panel -->
+        <div class="character-panel">
+            <div class="equipment">
+                <h3>Снаряжение</h3>
+                <div class="equipment-slot" data-slot="weapon">Оружие</div>
+                <div class="equipment-slot" data-slot="armor">Броня</div>
+                <div class="equipment-slot" data-slot="shield">Щит</div>
+            </div>
+            <div class="upgrades">
+                <h3>Улучшения</h3>
+                <div class="upgrade-list" id="upgradeList">
+                    <!-- Upgrades will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="boltfight.js"></script>
+</body>
+</html> 
